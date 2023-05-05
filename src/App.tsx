@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 
 const Input = styled.input`
@@ -9,15 +8,16 @@ const Input = styled.input`
   background-color: #222;
   font-size: 2rem;
   color: white;
-  padding: 0 6px;
+  padding: 0;
+  margin: 0;
 `;
 
 function App(): JSX.Element {
   const [content, setContent] = useState("");
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      console.log(content);
+      await invoke("add_task", { content });
     }
   };
 
@@ -26,12 +26,14 @@ function App(): JSX.Element {
   };
 
   return (
-    <Input
-      type="text"
-      value={content}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-    />
+    <>
+      <Input
+        type="text"
+        value={content}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+    </>
   );
 }
 
